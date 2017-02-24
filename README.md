@@ -4,7 +4,7 @@ Algorithms and abstract data types in C
 Hi.
 
 This is the result of my study of algorithms and abstract data types.
-All of them are working, tested, and documented. The test for the
+All of them are working, tested, and documented. The tests for the
 data types are documented as well. For the study I have used
 "Mastering Algorithms with C" by Kyle Loudon. The resulting code here
 is NOT the same as the code in the book, as I have created some data
@@ -13,7 +13,7 @@ types of my own and implemented some of the things differently from Loudon.
 All of the data types along with the comparison sorting algorithms work
 with void pointers, allowing for general use. The testing is done by executing
 every function of the data type with wrong, regular, and edge case input
-where applicable. If other testing methods are used, it's describer below.
+where applicable. If other testing methods are used, they are describer below.
 
 Here's a list of what you will find here.
 
@@ -44,7 +44,7 @@ as a linked list.
 uniqe words from a text and arranging them in alphabetical order.
 
 9. Binary tree			- a binary tree implementation. It's tested by parsing a fully parenthesized expression
-and traversing it preorder, inorder, and postorder, displaying it in prefix, infix, and posfix notations respectivelly.
+and traversing it preorder, inorder, and postorder, and displaying it in prefix, infix, and posfix notations respectivelly.
 
 10. AVL tree			- an AVL binary search tree.
 
