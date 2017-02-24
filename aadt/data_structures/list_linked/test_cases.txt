@@ -1,0 +1,84 @@
+list_init()			
+cases: 
+initialize list
+initialize witn no compar
+initialize witn no destroy
+
+list_destroy()		
+cases: 
+destroy list
+destroying with no destroy function
+
+list_apply_elmt()	
+cases: 
+apply function to an element
+apply function to all elements
+
+list_apply_all()	
+cases: 
+apply function to all elements
+
+list_ins_next() 	
+cases: 
+insert at the beginning
+insert after the head
+insert after the tail
+insert in the middle
+
+list_ins_first()
+cases:
+insert at the beginning
+	
+list_rem_next()
+cases:
+remove head
+remove from middle
+remove after tail
+
+list_rem_first()	
+case:
+remove head
+
+list_is_head()		
+cases:
+is head head?
+is tail head?
+is an element in the middle head?
+
+list_is_tail()		
+is tail tail?
+is the head tail?
+is en element in the middle tail?
+
+list_sort()			 
+cases:
+sorting with no compar function
+sorting empty list
+sorting 1 item
+sorting 2 items
+sorting same items
+sorting up
+sorting down
+sorting with invalid direction argument
+sorting 10k items - bubble sort gets slow
+
+list_find_from()	
+cases:
+searching with no compar function
+searching from the start of the list
+searching from the middle of the list
+searching for non existing element
+searching a list of 1 item
+searching a list of 2 items
+searching a list of more items
+searching an empty list
+searching a list of 10k items
+
+list_find()			
+cases:
+searching from the start of the list
+
+All tests passed.
+
+Notes: searching and sorting without a compar function does not cause a crash, unless you are trying to
+access illegal memory when supplying arguments to the searching function.

@@ -1,0 +1,32 @@
+CC=gcc
+CFLAGS=-s -Wall
+OBJ=drive_dfs.o graph.o list.o arrlist.o set.o dfs.o queue.o
+MAIN=dfs.exe
+
+drive_dfs_exe: $(OBJ)
+	$(CC) $(OBJ) -o $(MAIN) $(CFLAGS)
+
+drive_dfs.o: drive_dfs.c
+	$(CC) drive_dfs.c -c -o drive_dfs.o $(CFLAGS)
+	
+dfs.o: dfs.c dfs.h
+	$(CC) dfs.c -c -o dfs.o $(CFLAGS)	
+
+queue.o: queue.c queue.h
+	$(CC) queue.c -c -o queue.o $(CFLAGS)
+	
+graph.o: graph.c graph.h
+	$(CC) graph.c -c -o graph.o $(CFLAGS)
+
+list.o: list.c list.h
+	$(CC) list.c -c -o list.o $(CFLAGS)
+	
+arrlist.o: arrlist.c arrlist.h
+	$(CC) arrlist.c -c -o arrlist.o $(CFLAGS)
+
+set.o: set.c set.h
+	$(CC) set.c -c -o set.o $(CFLAGS)
+	
+clean:
+	del $(OBJ)
+	del $(MAIN)

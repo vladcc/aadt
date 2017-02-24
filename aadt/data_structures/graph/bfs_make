@@ -1,0 +1,32 @@
+CC=gcc
+CFLAGS=-s -Wall
+OBJ=drive_bfs.o graph.o list.o arrlist.o set.o bfs.o queue.o
+MAIN=bfs.exe
+
+drive_bfs_exe: $(OBJ)
+	$(CC) $(OBJ) -o $(MAIN) $(CFLAGS)
+
+drive_bfs.o: drive_bfs.c
+	$(CC) drive_bfs.c -c -o drive_bfs.o $(CFLAGS)
+	
+bfs.o: bfs.c bfs.h
+	$(CC) bfs.c -c -o bfs.o $(CFLAGS)	
+
+queue.o: queue.c queue.h
+	$(CC) queue.c -c -o queue.o $(CFLAGS)
+	
+graph.o: graph.c graph.h
+	$(CC) graph.c -c -o graph.o $(CFLAGS)
+
+list.o: list.c list.h
+	$(CC) list.c -c -o list.o $(CFLAGS)
+	
+arrlist.o: arrlist.c arrlist.h
+	$(CC) arrlist.c -c -o arrlist.o $(CFLAGS)
+
+set.o: set.c set.h
+	$(CC) set.c -c -o set.o $(CFLAGS)
+	
+clean:
+	del $(OBJ)
+	del $(MAIN)

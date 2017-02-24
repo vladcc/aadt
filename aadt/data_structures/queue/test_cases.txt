@@ -1,0 +1,23 @@
+queue_init()
+cases:
+init with destroy		- ok
+init without destroy	- ok
+
+queue_destroy()
+cases:
+destroy with destroy	- ok
+destroy without destroy	- ok
+
+queue_enq()
+cases:
+enq an element	- ok
+
+queue_deq()
+cases:
+deq an element			- ok
+deq from empty queue	- ok
+
+queue_peek()
+cases:
+peek a non-empty queue	- ok
+peek an empty queue		- ok

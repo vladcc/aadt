@@ -1,0 +1,19 @@
+A combination between a linked list and a dynamically grown array.
+
+The structure will have the following functions:
+
+arrlist_init()		- initializes the array list
+arrlist_destroy()	- destroyls the list and frees its memory
+arrlist_get()		- will return a pointer to the data at that index
+arrlist_insert()	- will insert an element at a specified position
+arrlist_remove()	- will remove an element at a specified position
+arrlist_sort()		- will sort the list up or down
+arrlist_find()		- will search for an element through the list
+arrlist_apply()		- will apply a user defined function to all elements/element
+
+The array list will be a dynamic array of void *. This way it will act as a doubly linked list but have a
+O(1) access time. It will also be binary searchable. Insertions will be O(n) at worst, however. They array
+will grow with a factor of 2.
+
+Removing will be handled by setting the void * to NULL and then bubbling the NULL to the last position of the list.
+The list size will be decreased after that.

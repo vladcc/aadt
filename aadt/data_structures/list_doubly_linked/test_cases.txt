@@ -1,0 +1,106 @@
+dlist_init()
+cases:
+initialize list with compar and destroy		- ok
+initialize list with compar only			- ok
+initialize list with destroy only			- ok
+initialize list without compar and destroy	- ok
+
+dlist_destroy()
+cases:
+destroy list with destroy		- ok
+destroy list without destroy	- ok
+
+dlist_ins_next()
+cases:
+insert NULL 					- ok
+insert after head				- ok
+insert after tail				- ok
+insert in the middle			- ok
+insert in empty list			- ok
+insert in list with elements	- ok
+
+dlist_ins_prev()
+cases:
+insert NULL						- ok
+insert before head				- ok
+insert before tail				- ok
+insert in the middle			- ok
+insert in empty list			- ok
+insert in list with elements	- ok
+
+dlist_remove()
+cases:
+remove NULL				- ok
+remove elements			- ok
+remove from empty list	- ok
+remove head				- ok
+remove tail				- ok
+remove from the middle	- ok
+
+dlist_is_head()
+cases:
+is the head head?					- ok
+is the tail head?					- ok
+is an element in the middle head?	- ok
+
+dlist_is_tail()
+cases:
+is the tail tail?					- ok
+is the head tail?					- ok
+is an element in the middle tail?	- ok
+
+dlist_apply()
+cases:
+apply to an element			- ok
+apply to NULL				- ok
+apply with bad direction	- ok
+
+dlist_apply_elmt()
+cases:
+apply to one element	- ok
+
+dlist_apply_forward()
+cases:
+apply from head			- ok
+apply from tail			- ok
+apply from middle		- ok
+apply to NULL element	- ok
+
+dlist_apply_backward()
+cases:
+apply from head			- ok
+apply from tail			- ok
+apply from middle		- ok
+apply to NULL			- ok
+
+dlist_sort()
+cases:
+sort one element		- ok
+sort empty list			- ok
+sort same elements		- ok
+sorting up				- ok
+sorting down			- ok
+sorting with no compar	 
+
+dlist_find_from()
+cases:
+search for repeating element	- ok
+search from NULL				- ok
+search from head				- ok
+search from tail				- ok
+
+dlist_find_forward()
+search forward from NULL	- ok
+search forward from head	- ok
+search forward from tail	- ok
+
+dlist_find_backward()
+cases:
+search backwards from NULL	- ok
+search backwards from head	- ok
+search backwards from tail 	- ok
+
+stress test:
+10 000 elements	inserting, searching, sorting - ok
+
+All tests completed successfully

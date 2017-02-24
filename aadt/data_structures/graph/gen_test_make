@@ -1,0 +1,26 @@
+CC=gcc
+CFLAGS=-s -Wall
+OBJ=drive_general.o graph.o list.o arrlist.o set.o bfs.o queue.o
+MAIN=gen_test.exe
+
+gen_test: $(OBJ)
+	$(CC) $(OBJ) -o $(MAIN) $(CFLAGS)
+
+drive_general.o: drive_general.c
+	$(CC) drive_general.c -c -o drive_general.o $(CFLAGS)
+	
+graph.o: graph.c graph.h
+	$(CC) graph.c -c -o graph.o $(CFLAGS)
+
+list.o: list.c list.h
+	$(CC) list.c -c -o list.o $(CFLAGS)
+	
+arrlist.o: arrlist.c arrlist.h
+	$(CC) arrlist.c -c -o arrlist.o $(CFLAGS)
+
+set.o: set.c set.h
+	$(CC) set.c -c -o set.o $(CFLAGS)
+	
+clean:
+	del $(OBJ)
+	del $(MAIN)

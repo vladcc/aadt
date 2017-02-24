@@ -1,0 +1,77 @@
+initializing hash table
+table size is now: 0
+reading words
+done
+13 words processed
+table size/unique words: 12
+sorting lists...
+
+print words
+bucket no. 0:
+amazon
+anastacia
+
+bucket no. 1:
+bear
+bee
+bomb
+
+bucket no. 5:
+flower
+
+bucket no. 9:
+john
+
+bucket no. 11:
+lamb
+
+bucket no. 17:
+rabbit
+
+bucket no. 22:
+whale
+wolf
+
+bucket no. 25:
+zebra
+
+
+looking for rabbit
+found
+removing it
+removed
+
+looking for rabbit again
+not found
+removing it
+not there to remove
+
+print words
+bucket no. 0:
+amazon
+anastacia
+
+bucket no. 1:
+bear
+bee
+bomb
+
+bucket no. 5:
+flower
+
+bucket no. 9:
+john
+
+bucket no. 11:
+lamb
+
+bucket no. 22:
+whale
+wolf
+
+bucket no. 25:
+zebra
+
+table size: 11
+destroying table
+testing is done

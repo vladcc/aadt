@@ -1,0 +1,62 @@
+set_init()
+cases:
+init a set	- ok
+
+set_destroy()
+cases:
+destroy a set - ok
+
+set_insert()
+cases:
+insert an non-existing element	- ok
+insert an existing element		- ok
+
+set_remove()
+cases:
+remove an existing element		- ok
+remove non-existing element		- ok
+remove from empty set			- ok
+
+set_union()
+cases:
+create union of 2 different sets			- ok
+create union of the same set				- ok
+craete union of 2 sets with common members	- ok
+create union with a set and an empty set	- ok
+
+set_intersection()
+cases:
+create intersection of 2 different sets				- ok
+create intersection of the same set					- ok
+craete intersection of 2 sets with common members	- ok
+create intersection with a set and an empty set		- ok
+
+set_difference()
+cases:
+create difference of 2 different sets				- ok
+create difference of the same set					- ok
+craete difference of 2 sets with common members		- ok
+create difference with a set and an empty set		- ok
+
+set_is_member()
+cases:
+check for existing member		- ok
+check for non existing member	- ok
+
+set_is_subset()
+cases:
+check for equal sets				- ok
+check for non-equal sets			- ok
+check for a set and an empty set	- ok
+
+set_is_equal()
+cases:
+check for equal sets				- ok
+check for non-equal sets			- ok
+check for a set and an empty set	- ok
+
+set_apply()
+cases:
+apply a function to a set	- ok
+
+All tests passed successfully.

@@ -1,0 +1,27 @@
+graph_init()		- works
+
+graph_ins_vertex()
+insert unique		- works, inserts it
+insert duplicate	- works, doesn't insert
+
+graph_rem_vertex()
+remove unadjacent 	- works, doesn't remove
+remove adjacent		- works, removes
+
+graph_adjlist()
+get list for existing vertex		- works, gets list
+get list for non-existing vertex	- works, returns failure status
+
+graph_is_adjacent()	- works
+
+graph_ins_edge()
+insert unique		- works, inserts
+insert duplicate	- works, doesn't insert
+
+graph_rem_edge()
+remove existing edge		- works, removed
+remove non-existing edge	- works, not removed
+
+graph_destroy()		- works
+
+All tests passed successfully

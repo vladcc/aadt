@@ -1,0 +1,82 @@
+arrlist_init()
+cases:
+init with compar and destroy		- ok
+init with compar only				- ok	
+init with destroy only				- ok
+init without compar and destroy		- ok
+
+arrlist_destroy()
+cases:
+destroy with destroy	- ok
+destroy wihtout destroy	- ok
+
+arrlist_get_elmt()
+cases:
+get head			- ok
+get tail			- ok
+get middle			- ok
+get non-existent	- ok
+
+arrlist_insert()
+cases:
+insert in empty list		- ok
+insert at the head			- ok
+insert at the tail			- ok
+insert at the middle		- ok
+insert at invalid position	- ok
+
+arrlist_remove()
+cases:
+remove from empty list			- ok
+remove head						- ok
+remove tail						- ok
+remove from middle				- ok
+remove from invalid position	- ok
+
+arrlist_apply_elmt()
+cases:
+apply to empty list	- ok
+apply with fun()	- ok
+apply without fun()	- ok
+
+arrlist_apply_all()
+cases:
+apply to all elements	- ok
+
+arrlist_sort()
+cases:
+sort empty list		- ok
+sort with no compar	- ok
+sort list			- ok
+
+arrlist_bsearch()
+cases:
+search sorted list				- ok
+search for head					- ok
+search for tail					- ok
+search for existing element 	- ok
+search for non-existing element	- ok
+search with no compar			- ok
+search empty list				- ok
+
+arrlist_search_from()
+cases:
+search for head							- ok
+search for tail							- ok
+search for existing element 			- ok
+search for non-existing element			- ok
+search from an element in the list		- ok
+search from position before the head	- ok
+search from position after the tail		- ok
+search with no compar					- ok
+search empty list						- ok
+
+arrlist_lsearch()
+cases:
+search list	- ok
+
+static arrlist_grow()
+cases:
+double the size of the list - ok
+
+All tests passed succesfully.

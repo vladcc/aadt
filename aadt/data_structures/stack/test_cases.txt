@@ -1,0 +1,25 @@
+stack_init()
+cases:
+init with destroy		- ok
+init without destroy	- ok
+
+stack_destroy()
+cases:
+destroy with destroy	- ok
+destroy without destroy	
+
+stack_push()
+cases:
+push an element			- ok
+
+stack_pop()
+cases:
+pop an element			- ok
+pop from an empty stack	- ok
+
+stack_peek()
+cases:
+peek on stack			- ok
+peek on empty stack		- ok
+
+All tests passed successfully.

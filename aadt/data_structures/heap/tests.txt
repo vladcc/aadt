@@ -1,0 +1,6 @@
+heap_init()		- works
+heap_destroy()	- works
+heap_insert()	- works
+heap_extract()	- works
+
+Primary functionality tests successful.

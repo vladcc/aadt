@@ -1,0 +1,7 @@
+bstree_init()		- works
+bstree_insert() 	- works
+bstree_lookup()		- works
+bstree_remove()		- works
+bstree_destroy()	- works
+
+All primary functionality tests passed successfully.

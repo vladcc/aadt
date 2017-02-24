@@ -1,0 +1,24 @@
+chtbl_init()
+cases:
+initialize table	- ok
+
+chtbl_destroy()
+cases:
+destroy table	- ok
+
+chtbl_insert()
+cases:
+insert non-existing	- ok
+insert existing 	- ok
+
+chtbl_remove()
+cases:
+remove existing 	- ok
+remove non-existing	- ok
+
+chtbl_lookup()
+cases:
+find existing		- ok
+find non-existing	- ok
+
+All test passed successfully.

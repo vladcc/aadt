@@ -1,0 +1,64 @@
+clist_init()
+cases:
+init with compar and destroy		- ok
+init with compar only				- ok
+init with destroy only				- ok
+init without compar and destroy
+
+clist_destroy()
+cases:
+destroy with destroy		- ok
+destroy without destroy		- ok
+
+clist_apply_elmt()
+cases:
+apply function to element	- ok
+
+clist_apply_all()
+cases:
+apply function to all elements	- ok
+
+clist_ins_next()
+cases:
+insert in empty list	- ok
+insert in the middle	- ok
+
+clist_ins_ahead()
+cases:
+insert after head	- ok
+
+clist_rem_next()
+cases:
+remove after an element	- ok
+
+clist_rem_ahead()
+cases:
+remove after head	- ok
+
+clist_is_head()
+cases:
+is head head?			- ok
+is anything else head?	- ok
+
+clist_sort()
+cases:
+sort up				- ok
+sort down			- ok
+sort no elements	- ok
+sort one element	- ok
+sort same elements	- ok
+
+clist_find_next()
+cases:
+search from an element				- ok
+search empty list					- ok
+search for multiple occurrences		- ok
+search for non-existing element		- ok
+
+clist_find()
+cases:
+search from head	- ok
+
+test with 10 000 elements	- ok
+
+All test passed successfully.
