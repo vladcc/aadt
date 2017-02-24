@@ -8,8 +8,8 @@
  * to deallocate the data memory. This function is applied only when list_destroy() 
  * is called. If none is provided, only the list is destroyed. */
  
-#ifndef LIST_H_
-#define LIST_H_
+#ifndef LIST_H
+#define LIST_H
 
 #include <stdlib.h> // for NULL
 
