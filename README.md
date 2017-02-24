@@ -3,7 +3,7 @@ Algorithms and abstract data types in C
 
 Hi.
 
-This is the result of my study of abstract data types and algorithms.
+This is the result of my study of algorithms and abstract data types.
 All of them are working, tested, and documented. The test for the
 data types are documented as well. For the study I have used
 "Mastering Algorithms with C" by Kyle Loudon. The resulting code here
