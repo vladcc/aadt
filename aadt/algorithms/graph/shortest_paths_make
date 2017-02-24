@@ -1,0 +1,29 @@
+CC=gcc
+CFLAGS=-s -Wall
+OBJ=shortest_paths_drive.o graph.o list.o shortest_paths.o arrlist.o set.o
+MAIN=shortest_paths_drive.exe
+
+shortest_paths_drive: $(OBJ)
+	$(CC) $(OBJ) -o $(MAIN) $(CFLAGS)
+
+shortest_paths_drive.o: shortest_paths_drive.c
+	$(CC) shortest_paths_drive.c -c -o shortest_paths_drive.o $(CFLAGS)
+
+shortest_paths.o: shortest_paths.c shortest_paths.h
+	$(CC) shortest_paths.c -c -o shortest_paths.o $(CFLAGS)
+	
+graph.o: graph.c graph.h
+	$(CC) graph.c -c -o graph.o $(CFLAGS)
+
+list.o: list.c list.h
+	$(CC) list.c -c -o list.o $(CFLAGS)
+
+arrlist.o: arrlist.c arrlist.h
+	$(CC) arrlist.c -c -o arrlist.o $(CFLAGS)
+
+set.o: set.c set.h
+	$(CC) set.c -c -o set.o $(CFLAGS)
+	
+clean:
+	del $(OBJ)
+	del $(MAIN)

@@ -1,0 +1,20 @@
+CC=gcc
+CFLAGS=-s -Wall
+OBJ=traveling_salesman.o list.o traveling_salesman_drive.o
+MAIN=traveling_salesman_drive.exe
+
+traveling_salesman: $(OBJ)
+	$(CC) $(OBJ) -o $(MAIN) $(CFLAGS)
+
+traveling_salesman_drive.o: traveling_salesman_drive.c
+	$(CC) traveling_salesman_drive.c -c -o traveling_salesman_drive.o $(CFLAGS)
+	
+traveling_salesman.o: traveling_salesman.c traveling_salesman.h
+	$(CC) traveling_salesman.c -c -o traveling_salesman.o $(CFLAGS)
+
+list.o: list.c list.h
+	$(CC) list.c -c -o list.o $(CFLAGS)
+	
+clean:
+	del $(OBJ)
+	del $(MAIN)

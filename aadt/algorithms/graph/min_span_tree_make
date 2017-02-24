@@ -1,0 +1,29 @@
+CC=gcc
+CFLAGS=-s -Wall
+OBJ=min_span_tree_drive.o graph.o list.o min_span_tree.o arrlist.o set.o
+MAIN=min_span_tree_drive.exe
+
+min_span_tree_drive: $(OBJ)
+	$(CC) $(OBJ) -o $(MAIN) $(CFLAGS)
+
+min_span_tree_drive.o: min_span_tree_drive.c
+	$(CC) min_span_tree_drive.c -c -o min_span_tree_drive.o $(CFLAGS)
+
+min_span_tree.o: min_span_tree.c min_span_tree.h
+	$(CC) min_span_tree.c -c -o min_span_tree.o $(CFLAGS)
+	
+graph.o: graph.c graph.h
+	$(CC) graph.c -c -o graph.o $(CFLAGS)
+
+list.o: list.c list.h
+	$(CC) list.c -c -o list.o $(CFLAGS)
+
+arrlist.o: arrlist.c arrlist.h
+	$(CC) arrlist.c -c -o arrlist.o $(CFLAGS)
+
+set.o: set.c set.h
+	$(CC) set.c -c -o set.o $(CFLAGS)
+	
+clean:
+	del $(OBJ)
+	del $(MAIN)
