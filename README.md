@@ -7,7 +7,7 @@ This is the result of my study of algorithms and abstract data types.
 All of them are working, tested, and documented. The tests for the
 data types are documented as well. For the study I have used
 "Mastering Algorithms with C" by Kyle Loudon. The resulting code here
-is NOT the same as the code in the book, as I have created some data
+is not the same as the code in the book, as I have created some data
 types of my own and implemented some of the things differently from Loudon.
 
 All of the data types along with the comparison sorting algorithms work
