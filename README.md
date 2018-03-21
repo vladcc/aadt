@@ -57,6 +57,7 @@ the data, rather than pointers pointing directly to the data.
 Along with the general tests, the graph is tested with breadth-first search(counting network hops) and 
 depth-first search(topological order/dependency sorting) algorithms. Visualisation is provided for convenience.
 
+13. Dynamic array - copies the data inside itself, grows automatically, supports online sorting.
 
 Algorithms
 
