@@ -234,7 +234,7 @@ bool dyn_trim_test(void)
     check(0 == dyn_arr_destroy(vector)); // vector->data = NULL
 
     check(DYN_ARR_BAD_ARRAY == dyn_arr_trim(vector));
-    vector->data = (void *)1;
+    vector->data = emalloc(sizeof(int));
     check(DYN_ARR_BAD_ARRAY == dyn_arr_trim(vector));
     vector->elements = 32;
     check(DYN_ARR_BAD_ARRAY == dyn_arr_trim(vector));
