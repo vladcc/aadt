@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include "source/dynamic_array.h"
+#include "dynamic_array.h"
 
 //---------------------------------------------------------------------------
 
