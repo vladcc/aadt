@@ -8,7 +8,7 @@
 
     All pointers to the array are valid as long as it doesn't grow or shrink.
 
-    If DYN_ARR_COMPILE_CHECKS is NOT defined on compile time, function arguments are
+    If DYN_ARR_NO_CHECKS is defined on compile time, function arguments are
     NOT checked at runtime and valid return codes are only 0, DYN_ARR_MEM_ERR, and
     DYN_ARR_NOT_FOUND.
 
@@ -64,14 +64,14 @@
     dyn_arr_const_find_from()
     dyn_arr_const_apply_to()
 */
-/* v1.0 */
+/* v1.1 */
 
 /* Author: Vladimir Dinev */
 
 #ifndef DYNAMIC_ARRAY_H
 #define DYNAMIC_ARRAY_H
 
-#define DYN_ARR_COMPILE_CHECKS
+//#define DYN_ARR_NO_CHECKS
 
 #define DYN_ARR_DEFAULT_CAPACITY    16
 #define DYN_ARR_APPLY_ALL           -1

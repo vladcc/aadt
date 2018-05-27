@@ -4,10 +4,10 @@
 #include "dynamic_array.h"
 //---------------------------------------------------------------------------
 
-#ifdef DYN_ARR_COMPILE_CHECKS
-    #define sanity_chk(expr, retval)  if (expr) return (retval)
+#ifdef DYN_ARR_NO_CHECKS
+     #define sanity_chk(expr, retval)
 #else
-    #define sanity_chk(expr, retval)
+    #define sanity_chk(expr, retval)  if (expr) return (retval)
 #endif
 
 typedef unsigned char byte;
