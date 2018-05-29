@@ -7,7 +7,7 @@
 #ifdef DYN_ARR_NO_CHECKS
      #define sanity_chk(expr, retval)
 #else
-    #define sanity_chk(expr, retval)  if (expr) return (retval)
+    #define sanity_chk(expr, retval)  while (expr) return (retval)
 #endif
 
 typedef unsigned char byte;
