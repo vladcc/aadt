@@ -1,31 +1,12 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <time.h>
+#include "test.h"
 #include "dynamic_array.h"
 
-//---------------------------------------------------------------------------
-
-#define check(expr)\
-do\
-{\
-    if (!(expr))\
-    {\
-        printf("In\n%s\n%s()\nline %d\n", __FILE__, __func__, __LINE__);\
-        printf("'%s' has failed\n", #expr);\
-        return false;\
-    }\
-} while(0)
-
-#ifdef VERBOSE
-    #define report_name()   fprintf(stderr, "%s\n", __func__)
-#else
-    #define report_name()
-#endif
-//---------------------------------------------------------------------------
-
-typedef bool (*ftest)(void);
-
 void run_tests(void);
+
 bool dyn_arr_destroy_test(void);
 bool dyn_arr_create_test(void);
 bool dyn_arr_getters_test(void);
@@ -102,8 +83,6 @@ int compar(const void * key1, const void * key2)
 
 bool dyn_arr_destroy_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
 
@@ -140,8 +119,6 @@ void add_1(void * elem)
 
 bool dyn_arr_create_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
 
@@ -176,8 +153,6 @@ bool dyn_arr_create_test(void)
 
 bool dyn_arr_getters_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
     void * data_out;
@@ -222,8 +197,6 @@ bool dyn_arr_getters_test(void)
 
 bool dyn_trim_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
 
@@ -260,8 +233,6 @@ bool dyn_trim_test(void)
 
 bool dyn_arr_push_back_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
     int n = 6;
@@ -300,8 +271,6 @@ bool dyn_arr_push_back_test(void)
 
 bool dyn_arr_pop_back_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
     int n = 6;
@@ -329,8 +298,6 @@ bool dyn_arr_pop_back_test(void)
 
 bool dyn_arr_write_at_index_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
     int n = 6;
@@ -369,8 +336,6 @@ bool dyn_arr_write_at_index_test(void)
 
 bool dyn_arr_insert_at_index_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
     int n = 6;
@@ -442,8 +407,6 @@ bool dyn_arr_insert_at_index_test(void)
 
 bool dyn_arr_remove_at_index_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
 
@@ -507,8 +470,6 @@ bool dyn_arr_remove_at_index_test(void)
 
 bool dyn_arr_read_at_index_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
     const void * _out;
@@ -550,8 +511,6 @@ bool dyn_arr_read_at_index_test(void)
 
 bool dyn_arr_read_back_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
     void * out;
@@ -583,8 +542,6 @@ bool dyn_arr_read_back_test(void)
 
 bool dyn_arr_sort_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
 
@@ -671,8 +628,6 @@ bool dyn_arr_sort_test(void)
 
 bool dyn_arr_find_from_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
 
@@ -773,8 +728,6 @@ bool dyn_arr_find_from_test(void)
 
 bool dyn_arr_const_find_from_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
 
@@ -805,8 +758,6 @@ bool dyn_arr_const_find_from_test(void)
 
 bool dyn_arr_remove_by_value_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
 
@@ -860,8 +811,6 @@ bool dyn_arr_remove_by_value_test(void)
 
 bool dyn_arr_append_array_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
 
@@ -921,8 +870,6 @@ void foo(void * arr_elm, void * args)
 
 bool dyn_arr_apply_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
 
@@ -965,8 +912,6 @@ void foo_const(const void * arr_elm, void * args)
 
 bool dyn_arr_const_apply_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
 
@@ -1000,8 +945,6 @@ bool is_sorted(int * arr, int size)
 
 bool dyn_arr_insert_online_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
 
@@ -1053,8 +996,6 @@ bool dyn_arr_insert_online_test(void)
 
 bool dyn_arr_reset_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
 
@@ -1081,8 +1022,6 @@ bool dyn_arr_reset_test(void)
 
 bool dyn_arr_is_empty_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
 
@@ -1105,8 +1044,6 @@ bool dyn_arr_is_empty_test(void)
 
 bool dyn_arr_const_data_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
 
@@ -1139,11 +1076,9 @@ bool dyn_arr_const_data_test(void)
 }
 //---------------------------------------------------------------------------
 
-#define MAX (1000 * 1000 * 10)
+#define MAX (1000 * 1000 * 100)
 bool dyn_arr_stress_test(void)
 {
-    report_name();
-
     Dyn_arr _vector;
     Dyn_arr * vector = &_vector;
 
@@ -1203,19 +1138,29 @@ bool dyn_arr_stress_test(void)
     dyn_arr_data(vector, (void **)&pi);
     int a, b;
     a = 0;
+    
+    clock_t begin, end;
+    double elapsed;
+    
+    begin = clock();
     for (i = 0; i < MAX; ++i)
     {
         dyn_arr_read_at_index(vector, i, (const void **)&tmp);
         a += *tmp;
     }
-
-    printf("%d\n", a);
+	end = clock();
+	elapsed = (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("accumulated: %d, time %.3f sec\n", a, elapsed);
 
     b = 0;
+    begin = clock();
     for (i = 0; i < MAX; ++i)
+    {
         b += pi[i];
-
-    printf("%d\n", b);
+    }   
+	end = clock();
+	elapsed = (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("accumulated: %d, time %.3f sec\n", b, elapsed);
 
     dyn_arr_remove_at_index(vector, 0);
     printf("elements: %d\n", dyn_arr_elements(vector));
@@ -1244,9 +1189,8 @@ void run_tests(void)
 
     if (passed != end)
         putchar('\n');
-
-    printf("Tests passed: %d\n", passed);
-    printf("Tests failed: %d\n", end - passed);
+	
+	report(passed, end-passed);
     return;
 }
 //---------------------------------------------------------------------------
