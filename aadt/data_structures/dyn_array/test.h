@@ -1,6 +1,6 @@
 #ifndef TEST_H
 #define TEST_H
-/* v1.0 */
+/* v1.1 */
 
 //#define REPORT_VERBOSE
 //#define REPORT_FILE
@@ -33,8 +33,9 @@ else printf(base_msg pass_msg, __FILE__, __func__, __LINE__, #expr);
 #define report(pass, fail)\
 do\
 {\
-printf("%s\nTests passed: %d\n", __FILE__, (pass));\
-printf("%s\nTests failed: %d\n", __FILE__, (fail));\
+puts(__FILE__);\
+printf("Tests passed: %d\n", (pass));\
+printf("Tests failed: %d\n", (fail));\
 puts("------------------------------------------------");\
 } while(0)
 
@@ -54,7 +55,6 @@ do\
 {\
 printf("Tests passed: %d\n", (pass));\
 printf("Tests failed: %d\n", (fail));\
-puts("------------------------------------------------");\
 } while(0)
 
 #endif
