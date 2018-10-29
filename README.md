@@ -41,10 +41,10 @@ as a linked list.
 7. Set					- a set implementation done with an array list instead of a linked list.
 
 8. Hash table			- a chained hash table implemented as an array of linked lists. It's tested by obtaining 
-uniqe words from a text and arranging them in alphabetical order.
+unique words from a text and arranging them in alphabetical order.
 
 9. Binary tree			- a binary tree implementation. It's tested by parsing a fully parenthesized expression
-and traversing it preorder, inorder, and postorder, and displaying it in prefix, infix, and posfix notations respectivelly.
+and traversing it preorder, inorder, and postorder, and displaying it in prefix, infix, and postfix notations respectively.
 
 10. AVL tree			- an AVL binary search tree.
 
@@ -52,12 +52,15 @@ and traversing it preorder, inorder, and postorder, and displaying it in prefix,
 
 12. Graph				- a graph data type implemented with sets and lists.
 Note: The arrlist.c in the graph directory is different than the standalone arrlist.c. Because of the use of qsort()
-from the stdlib, the standalone version needs to pass argumets to compar() as pointers to the pointers pointing to
+from the stdlib, the standalone version needs to pass arguments to compar() as pointers to the pointers pointing to
 the data, rather than pointers pointing directly to the data.
 Along with the general tests, the graph is tested with breadth-first search(counting network hops) and 
 depth-first search(topological order/dependency sorting) algorithms. Visualisation is provided for convenience.
 
-13. Dynamic array - copies the data inside itself, grows automatically, supports online sorting. Not in the book.
+13. Dynamic array - copies the data inside itself, grows automatically, supports online sorting. Not in the book,
+over engineered.
+
+14. c_vector - a more general, usable dynamic array. Not in the book.
 
 Algorithms
 
@@ -74,7 +77,7 @@ Sorting:
 1. Counting sort
 2. Radix sort
 
-The testing module acceps as an argument from the command line a singed int number > 0, then
+The testing module accepts as an argument from the command line a singed int number > 0, then
 generates an array of that many numbers in descending order, then runs every sorting algorithm
 mentioned above along with qsort() from the stdlib, times them, and displays the results. 
 For values above 20 000 bubble sort and insertion sort are not evoked, as they begin to take too long.
@@ -89,7 +92,7 @@ Graph algorithms:
 2. Shortest paths
 3. The Traveling Salesman problem - implemented without a graph, with a coordinate system and nearest 
 neighbor heuristic, running in polynomial time but providing approximate results.
-In all graph algorithms visualisation is provded for convenience.
+In all graph algorithms visualization is provided for convenience.
 
 
 All of the above is going to be of help to anyone interested in computer science and C. It sure was
