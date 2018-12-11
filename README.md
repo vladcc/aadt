@@ -58,9 +58,9 @@ Along with the general tests, the graph is tested with breadth-first search(coun
 depth-first search(topological order/dependency sorting) algorithms. Visualisation is provided for convenience.
 
 13. Dynamic array - copies the data inside itself, grows automatically, supports online sorting. Not in the book,
-over engineered.
+over engineered. Do not use.
 
-14. c_vector - a more general, usable dynamic array. Not in the book.
+14. c_vector - a more usable dynamic array. Not in the book. Use instead of 13.
 
 Algorithms
 
