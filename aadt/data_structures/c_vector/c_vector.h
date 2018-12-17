@@ -1,5 +1,5 @@
 /*  c_vector.h -- a dynamic array
-    v1.1
+    v1.11
 
     A dynamic array implementation, much like the C++ vector.
     It's implemented with memcpy(), so it copies whatever you provide it with
@@ -23,13 +23,14 @@
 
     Author: Vladimir Dinev
     vld.dinev@gmail.com
-    2018-12-11
+    2018-12-15
 */
 
 #ifndef C_VECTOR_H
 #define C_VECTOR_H
 
 #include <stdbool.h>
+#include <stddef.h>
 
 #define C_VECT_DEFAULT_CAPACITY 16
 #define C_VECT_GROWTH_RATE      2
@@ -55,8 +56,8 @@ typedef struct c_vector {
 void * c_vect_make_cap(
     c_vector * cv, int elem_size, fcomp compar, int capacity
     );
-#define c_vect_make(cv, n, c)\
-c_vect_make_cap((cv), (n), (c), C_VECT_DEFAULT_CAPACITY)
+#define c_vect_make(cv, elem_size, compar)\
+c_vect_make_cap((cv), (elem_size), (compar), C_VECT_DEFAULT_CAPACITY)
 /*
 Returns: cv on success, NULL otherwise.
 
@@ -68,7 +69,8 @@ Complexity: O(1)
 */
 
 void c_vect_destroy(c_vector * cv);
-#define c_vect_destroy_null(cv) c_vect_destroy((cv)), (cv) = NULL
+#define c_vect_destroy_null(cv)\
+c_vect_destroy((cv)), (cv) = NULL
 /*
 Returns: Nothing.
 
@@ -135,7 +137,8 @@ Complexity: O(n)
 void * c_vect_insert_online_ind(
     c_vector * cv, const void * key, int * out_index
 );
-#define c_vect_insert_online(c, k) c_vect_insert_online_ind((c), (k), NULL)
+#define c_vect_insert_online(cv, key)\
+c_vect_insert_online_ind((cv), (key), NULL)
 /*
 Returns: A pointer to the inserted element in cv. If out_index is not NULL,
 the variable pointed to by out_index contains the index of the inserted element.
@@ -170,7 +173,9 @@ that index one to the left. index is out of range if it's less than
 Complexity: O(n)
 */
 
-void * c_vect_find(c_vector * cv, const void * key, int * out_index);
+void * c_vect_find_ind(c_vector * cv, const void * key, int * out_index);
+#define c_vect_find(cv, key)\
+c_vect_find_ind((cv), (key), NULL)
 /*
 Returns: A pointer to the element inside the array if found, NULL otherwise.
 If out_index is not NULL and NULL is returned, the value of the variable
@@ -183,7 +188,9 @@ be set to NULL.
 Complexity: O(n)
 */
 
-void * c_vect_bsearch(c_vector * cv, const void * key, int * out_index);
+void * c_vect_bsearch_ind(c_vector * cv, const void * key, int * out_index);
+#define c_vect_bsearch(cv, key)\
+c_vect_bsearch_ind((cv), (key), NULL)
 /*
 Returns: A pointer to the element inside the array if found, NULL otherwise.
 If out_index is not NULL and NULL is returned, the value of the variable

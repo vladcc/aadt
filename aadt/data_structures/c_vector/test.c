@@ -602,7 +602,7 @@ bool test_insert_online(void)
     for (int i = 0; i < arr_size; ++i)
     {
         int ind;
-        if (!c_vect_bsearch(vect, newarr + i, &ind))
+        if (!c_vect_bsearch_ind(vect, newarr + i, &ind))
             check(*(ins = c_vect_insert_online(vect, newarr + i)) == newarr[i]);
     }
 
@@ -626,7 +626,7 @@ bool test_bsearch(void)
     check(c_vect_make_cap(vect, esz, compar, cap) == vect);
 
     int * key;
-    check(!c_vect_bsearch(vect, NULL, NULL));
+    check(!c_vect_bsearch_ind(vect, NULL, NULL));
 
     for (int i = 0; i < 10; ++i)
         c_vect_push(vect, &i);
@@ -649,13 +649,13 @@ bool test_bsearch(void)
     for (unsigned int i = 0; i < sizeof(tbl)/sizeof(*tbl); ++i)
     {
         key = &(tbl[i].n);
-        void * res = c_vect_bsearch(vect, key, NULL);
+        void * res = c_vect_bsearch_ind(vect, key, NULL);
         check((bool)res == tbl[i].res);
         if (res)
             check(compar(res, key) == 0);
 
         int pos;
-        res = c_vect_bsearch(vect, key, &pos);
+        res = c_vect_bsearch_ind(vect, key, &pos);
         check((bool)res == tbl[i].res);
 
         bool right_pos = (pos == tbl[i].pos);
@@ -668,22 +668,22 @@ bool test_bsearch(void)
     void * first = c_vect_get(vect, 0);
     void * last = c_vect_peek(vect);
     int ind;
-    void * ffirst = c_vect_bsearch(vect, first, &ind);
+    void * ffirst = c_vect_bsearch_ind(vect, first, &ind);
     check(ffirst == first);
     check(0 == ind);
     check(compar(first, ffirst) == 0);
 
-    void * flast = c_vect_bsearch(vect, last, &ind);
+    void * flast = c_vect_bsearch_ind(vect, last, &ind);
     check(flast == last);
     check(c_vect_length(vect)-1 == ind);
     check(compar(flast, last) == 0);
 
     int less = -93471, more = 946242;
-    int * out = c_vect_bsearch(vect, &less, &ind);
+    int * out = c_vect_bsearch_ind(vect, &less, &ind);
     check(NULL == out);
     check(-1 == ind);
 
-    out = c_vect_bsearch(vect, &more, &ind);
+    out = c_vect_bsearch_ind(vect, &more, &ind);
     check(NULL == out);
     check(-1 == ind);
 
@@ -695,7 +695,8 @@ bool test_bsearch(void)
     for (i = 0; i < 10; ++i)
         c_vect_push(vect, &n);
 
-    out = c_vect_bsearch(vect, &n, &ind);
+    out = c_vect_bsearch_ind(vect, &n, &ind);
+    check(out == c_vect_bsearch(vect, &n));
     check(*out == n);
     check(ind == (i-1)/2);
 
@@ -780,24 +781,25 @@ bool test_find(void)
     {
         void * dest = (byte *)vect->arr + vect->elem_count * vect->elem_size;
         check(c_vect_push(vect, &i) == dest);
-        check(c_vect_find(vect, &i, NULL) == dest);
-        check(c_vect_find(vect, &i, &pos) == dest);
+        check(c_vect_find_ind(vect, &i, NULL) == dest);
+        check(c_vect_find(vect, &i) == dest);
+        check(c_vect_find_ind(vect, &i, &pos) == dest);
         check(pos == j);
     }
 
     int n = 10;
-    check(c_vect_find(vect, &n, NULL) == c_vect_data(vect));
-    check(c_vect_find(vect, &n, &pos));
+    check(c_vect_find_ind(vect, &n, NULL) == c_vect_data(vect));
+    check(c_vect_find_ind(vect, &n, &pos));
     check(pos == 0);
 
     n = -123;
-    check(c_vect_find(vect, &n, NULL) == NULL);
-    check(c_vect_find(vect, &n, &pos) == NULL);
+    check(c_vect_find_ind(vect, &n, NULL) == NULL);
+    check(c_vect_find_ind(vect, &n, &pos) == NULL);
     check(pos == -1);
 
     n = 35290;
-    check(c_vect_find(vect, &n, NULL) == NULL);
-    check(c_vect_find(vect, &n, &pos) == NULL);
+    check(c_vect_find_ind(vect, &n, NULL) == NULL);
+    check(c_vect_find_ind(vect, &n, &pos) == NULL);
     check(pos == -1);
 
     c_vect_destroy(vect);

@@ -102,7 +102,7 @@ void * c_vect_trim(c_vector * cv)
 
 //------------------------------------------------------------------------------
 
-void * c_vect_find(c_vector * cv, const void * key, int * out_index)
+void * c_vect_find_ind(c_vector * cv, const void * key, int * out_index)
 {
     byte * cv_key = NULL, * data = (byte *)cv->arr;
     int elem_size = cv->elem_size, elem_count = cv->elem_count;
@@ -160,7 +160,7 @@ void * c_vect_sort(c_vector * cv)
 }
 //------------------------------------------------------------------------------
 
-void * c_vect_bsearch(c_vector * cv, const void * key, int * out_index)
+void * c_vect_bsearch_ind(c_vector * cv, const void * key, int * out_index)
 {
     byte * data = (byte *)cv->arr, * cv_key = NULL;
     int elem_size = cv->elem_size, elem_count = cv->elem_count;
