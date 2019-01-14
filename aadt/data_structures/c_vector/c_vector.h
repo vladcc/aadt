@@ -1,10 +1,10 @@
 /*  c_vector.h -- a dynamic array
-    v1.11
+    v1.12
 
     A dynamic array implementation, much like the C++ vector.
-    It's implemented with memcpy(), so it copies whatever you provide it with
-    inside itself. As such it can contain pointers to data allocated somewhere
-    else, as well as actual copies of data.
+    It copies whatever you provide it with inside itself. As such it can contain
+    pointers to data allocated somewhere else, as well as actual copies of the
+    data. Memory operations are implemented with memcpy() and memmove()
 
     The structure keeps track of the number of elements it currently has, along
     with the maximum number of elements it can have before it has to grow,
@@ -13,17 +13,16 @@
     elements minus 1, the index of its current last element, including. When
     the capacity is reached, the array grows at the very next insert or push
     operation. The new size is determined by the result of the multiplication
-    of its capacity with C_VECT_GROWTH_RATE.
+    of its capacity by C_VECT_GROWTH_RATE.
 
     c_vector provides facilities for inserting, removing, copying, applying
     client-specified functions to its elements, a stack interface, sorting,
-    linear and binary search, and online insertion. Even though anything that
-    has to do with removal or insertion takes O(n) time, these are implemented
-    with memmove(), so they can be surprisingly quick.
+    linear and binary search, conditional search and removal, constant time
+    swap-pop removal, and online insertion.
 
     Author: Vladimir Dinev
     vld.dinev@gmail.com
-    2018-12-15
+    2019-01-14
 */
 
 #ifndef C_VECTOR_H
@@ -34,6 +33,15 @@
 
 #define C_VECT_DEFAULT_CAPACITY 16
 #define C_VECT_GROWTH_RATE      2
+
+#define C_VECT_MAX_STACK_BUFF   64
+/*
+When a c_vector needs a buffer, it will allocate either element size or
+C_VECT_MAX_STACK_BUFF number of bytes on the stack, whichever is smaller. If the
+element size is greater than C_VECT_MAX_STACK_BUFF, the vector will malloc() an
+additional buffer big enough for a single element, use it, and free() it.
+As of v1.12, c_vector uses an additional buffer only for c_vect_swap()
+*/
 
 // a three way comparison function like compar for qsort()
 typedef int (*fcomp)(const void * one, const void * two);
@@ -111,25 +119,34 @@ Description: Peeks at the last array element.
 Complexity: O(1)
 */
 
+void * c_vect_peek_pop(c_vector * cv);
+/*
+Returns: A pointer to the popped element from the vector, NULL if the vector is
+empty.
+
+Description: Combines peek and pop in one function call and a single range
+check.
+
+Complexity: O(1)
+*/
+
 void * c_vect_get(c_vector * cv, int index);
 /*
 Returns: A pointer to the element at index, NULL if index is out of range, or
 the array is empty.
 
-Description: Indexes into the array. index is out of range if it's less than 0,
-or equal or greater than the number of elements currently in the array.
+Description: Indexes into the array.
 
 Complexity: O(1)
 */
 
-void * c_vect_insert_at_index(c_vector * cv, int index, const void * key);
+void * c_vect_insert_at(c_vector * cv, int index, const void * key);
 /*
 Returns: A pointer to the inserted element inside the array on success,
 NULL if index is out of range.
 
 Description: Insert the element pointed to by key at index after first moving
-all elements from index one to the right. index is out of range if it's less
-than 0, or equal or greater than the number of elements currently in the array.
+all elements from index one to the right.
 
 Complexity: O(n)
 */
@@ -150,40 +167,159 @@ sort. Calling this function on an unsorted array results in undefined behavior.
 Complexity: O(log n) for finding the insertion point, O(n) for the insertion.
 */
 
-void * c_vect_write_at_index(c_vector * cv, int index, const void * key);
+void * c_vect_write_at(c_vector * cv, int index, const void * key);
 /*
 Returns: A pointer to the element written inside the array on success,
 NULL if index is out of range.
 
 Description: Overwrites the element at index with the element pointed to by key.
-index is out of range if it's less than 0, or equal or greater than the number
-of elements currently in the array.
 
 Complexity: O(1)
 */
 
-void * c_vect_remove_at_index(c_vector * cv, int index);
+void * c_vect_remove_at(c_vector * cv, int index);
 /*
 Returns: cv on success, NULL if index is out of range.
 
 Description: Removes the element at index by moving all memory on the right of
-that index one to the left. index is out of range if it's less than
-0, or equal or greater than the number of elements currently in the array.
+that index one to the left.
 
 Complexity: O(n)
 */
 
-void * c_vect_find_ind(c_vector * cv, const void * key, int * out_index);
-#define c_vect_find(cv, key)\
-c_vect_find_ind((cv), (key), NULL)
+int c_vect_remove_by_val(c_vector * cv, const void * key);
 /*
-Returns: A pointer to the element inside the array if found, NULL otherwise.
-If out_index is not NULL and NULL is returned, the value of the variable
-pointed to by out_index is -1. If out_index is not NULL and key is found, it's
-the index of the element found inside the array.
+Returns: The number of elements removed.
 
-Description: Performs a liner search for key. If out_index is not used, it can
-be set to NULL.
+Description: Goes through the vector and removes all elements with the same
+value as key, that is, all elements for which compar() returns 0 when compared
+to key.
+
+Complexity: O(n)
+*/
+
+int c_vect_remove_if(c_vector * cv, fcomp condition, const void * key);
+/*
+Returns: The number of elements removed.
+
+Description: Switches the compar function inside cv with condition, calls
+c_vect_remove_by_val(), switches back to the original compar.
+
+Complexity: O(n)
+*/
+
+void * c_vect_swap(c_vector * cv, int index_one, int index_two);
+/*
+Returns: cv on success, NULL otherwise.
+
+Description: Swaps the elements at index_one and index_two. If any of the two
+indices is out of range, the function fails.
+
+Complexity: O(1)
+*/
+
+void * c_vect_swap_pop_at(c_vector * cv, int index);
+/*
+Returns: cv on success, NULL otherwise.
+
+Description: Swaps the element at index with the last element and pops it off,
+effectively removing it from the vector. Does not preserve the order of the
+elements.
+
+Complexity: O(1)
+*/
+
+int c_vect_swap_pop_by_val(c_vector * cv, const void * key);
+/*
+Returns: The number of elements removed.
+
+Description: Swap-pops all elements with the same value as key, that is, all
+elements for which compar() returns 0 when compared to key.
+
+Complexity: O(n)
+*/
+
+int c_vect_swap_pop_if(c_vector * cv, fcomp condition, const void * key);
+/*
+Returns: The number of elements removed.
+
+Description: Switches the compar function inside cv with condition, calls
+c_vect_swap_pop_by_val(), switches back to the original compar.
+
+Complexity: O(n)
+*/
+
+void * c_vect_reverse(c_vector * cv);
+/*
+Returns: cv
+
+Description: Reverses the order of elements in the vector by swap-popping.
+
+Complexity: O(n/2)
+*/
+
+void * c_vect_set_to_val(c_vector * cv, const void * key);
+/*
+Returns: cv
+
+Description: Sets all elements of the vector to the value of key.
+
+Complexity: O(n)
+*/
+
+void * c_vect_remove_range(c_vector * cv, int index_first, int index_last);
+/*
+Returns: cv on success, NULL otherwise.
+
+Description: Removes all elements between index_first and index_last, both
+including. The function fails if any of the two indices is out of range, or
+if index_first is greater than index_last.
+
+Complexity: O(n)
+*/
+
+void * c_vect_find_ind_from(
+    c_vector * cv, const void * key, int * out_index, int from_index
+    );
+#define c_vect_find_ind(cv, key, out_index)\
+c_vect_find_ind_from((cv), (key), (out_index), 0)
+
+#define c_vect_find_from(cv, key, from_index)\
+c_vect_find_ind_from((cv), (key), NULL, (from_index))
+
+#define c_vect_find(cv, key)\
+c_vect_find_ind_from((cv), (key), NULL, 0)
+/*
+Returns: A pointer to the element inside the array if found, NULL if the
+element is not found, or from_index is out of range. If out_index is not NULL
+and NULL is returned, the value of the variable pointed to by out_index is -1.
+If out_index is not NULL and key is found, it's the index of the element found
+inside the array.
+
+Description: Performs a linear search for key. If out_index is not used, it can
+be set to NULL. out_index must point to a variable different than from_index.
+
+Complexity: O(n)
+*/
+
+void * c_vect_find_if_ind_from(
+    c_vector * cv, fcomp condition, const void * key, int * out_index,
+    int from_index
+    );
+#define c_vect_find_if_ind(cv, condition, key, out_index)\
+c_vect_find_if_ind_from((cv), (condition), (key), (out_index), 0)
+
+#define c_vect_find_if_from(cv, condition, key, from_index)\
+c_vect_find_if_ind_from((cv), (condition), (key), NULL, (from_index))
+
+#define c_vect_find_if(cv, condition, key)\
+c_vect_find_if_ind_from((cv), (condition), (key), NULL, 0)
+/*
+Returns: A pointer to the first element inside the vector starting from
+from_index for which condition returned 0 after comparing it to key.
+
+Description: Switches the compar function inside cv with condition, calls
+c_vect_find_ind_from(), switches back to the original compar.
 
 Complexity: O(n)
 */
@@ -211,16 +347,16 @@ Returns: cv
 
 Description: Sorts the array if it is not sorted.
 
-Complexity: O(n) if it's already sorted. Otherwise, as per the cstdlib's
-qsort(), sorting is approximately O(n log n).
+Complexity: O(n) if it's already sorted, otherwise calls qsort(), which is
+stated as approximately O(n log n).
 */
 
 void * c_vect_apply(c_vector * cv, fapply fun);
 /*
 Returns: cv
 
-Description: Applies a function of type void (*f)(void) to all elements of the
-array.
+Description: Applies a function of type void (*f)(void * elem) to all elements
+of the array.
 
 Complexity: O(n)
 */
@@ -229,8 +365,8 @@ void * c_vect_apply_args(c_vector * cv, fapply_args fun, void * args);
 /*
 Returns: cv
 
-Description: Applies a function of type void (*f)(void * args) to all elements
-of the array.
+Description: Applies a function of type void (*f)(void * elem, void * args) to
+all elements of the array.
 
 Complexity: O(n)
 */
@@ -239,20 +375,19 @@ void * c_vect_append_array(c_vector * cv, const void * arr, int len);
 /*
 Returns: cv on success, NULL if relocation failed.
 
-Description: Grows cv if needed and appends len elements of the array pointed to
+Description: Grows cv as needed and appends len elements of the array pointed to
 by arr.
 
 Complexity: O(n) for potential relocation, O(n) for the append, where n is len.
 */
 
-void * c_vect_copy(c_vector * dest, const c_vector * src);
+c_vector c_vect_copy(const c_vector * src, bool * success);
 /*
-Returns: dest on success, NULL otherwise.
+Returns: A deep copy of the c_vector pointed to by src. If the function fails,
+the variable pointed to by success is set to false and all members of the
+returned vector are set to zero.
 
-Description: Makes a deep copy of src in dest. dest is assumed to point to a
-c_vector structure that has either not been initialized with c_vect_make(), or
-c_vect_make_cap(), or it has been destroyed with c_vect_destroy(), but not
-c_vect_destroy_null()
+Description: Makes a deep copy of src. success can be NULL if not used.
 
 Complexity: O(n)
 */
@@ -261,10 +396,10 @@ void * c_vect_resize(c_vector * cv, int new_capacity);
 /*
 Returns: cv on success, NULL otherwise.
 
-Description: Reallocates and resizes the array to new_capacity. new_capacity has
-to be a positive number. If new_capacity is less than the current number of
-elements in the array, the number of elements in the array is trimmed to the
-value of new_capacity.
+Description: Resizes the array to new_capacity, reallocates if necessary.
+new_capacity has to be a positive number. If new_capacity is less than the
+current number of elements in the array, the number of elements in the array is
+trimmed to the value of new_capacity.
 
 Complexity: Depends on realloc(), might be O(n)
 */
@@ -290,7 +425,7 @@ Complexity: O(n) where n is the number of bytes of cv's capacity.
 
 void * c_vect_set_length(c_vector * cv, int len);
 /*
-Returns: NULL if len is out of range, cv on success.
+Returns: cv on success, NULL if len is out of range.
 
 Description: Changes the number of elements in the array, effectively expanding
 or shrinking the number of indices you have random access to. len is out of
@@ -303,7 +438,16 @@ void * c_vect_set_compar(c_vector * cv, fcomp compar);
 /*
 Returns: cv
 
-Description: Changes the compar function in cv.
+Description: Changes the compar function used by cv.
+
+Complexity: O(1)
+*/
+
+void * c_vect_compar(c_vector * cv);
+/*
+Returns: The address of the current compar function used by cv.
+
+Description: Gets the compar function of cv.
 
 Complexity: O(1)
 */

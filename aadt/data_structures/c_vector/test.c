@@ -12,7 +12,7 @@ bool test_trim(void);
 bool test_resize(void);
 bool test_pop(void);
 bool test_peek(void);
-bool test_find(void);
+bool test_find_rem_by_val(void);
 bool test_is_sorted(void);
 bool test_sort(void);
 bool test_bsearch(void);
@@ -28,6 +28,15 @@ bool test_apply(void);
 bool test_zero_out(void);
 bool test_set_length(void);
 bool test_copy(void);
+bool test_swap(void);
+bool test_swap_pop_reverse(void);
+bool test_peek_pop(void);
+bool test_swap_pop_by_val(void);
+bool test_set_to_val(void);
+bool test_remove_range(void);
+bool test_find_if(void);
+bool test_remove_if(void);
+bool test_swap_pop_if(void);
 
 static ftest tests[] = {
     test_make_cap_vect,
@@ -38,7 +47,7 @@ static ftest tests[] = {
     test_resize,
     test_pop,
     test_peek,
-    test_find,
+    test_find_rem_by_val,
     test_is_sorted,
     test_sort,
     test_bsearch,
@@ -53,7 +62,16 @@ static ftest tests[] = {
     test_apply,
     test_zero_out,
     test_set_length,
-    test_copy
+    test_copy,
+    test_swap,
+    test_swap_pop_reverse,
+    test_swap_pop_by_val,
+    test_peek_pop,
+    test_set_to_val,
+    test_remove_range,
+    test_find_if,
+    test_remove_if,
+    test_swap_pop_if
 };
 
 typedef unsigned char byte;
@@ -61,17 +79,558 @@ typedef unsigned char byte;
 
 int compar(const void * k1, const void * k2)
 {
-    int * i1 = (int *)k1;
-    int * i2 = (int *)k2;
+    int i1 = *(int *)k1;
+    int i2 = *(int *)k2;
 
     int result = 0;
-    if (*i1 > *i2)
+    if (i1 > i2)
         result = 1;
-
-    if (*i1 < *i2)
+    else if (i1 < i2)
         result = -1;
 
     return result;
+}
+
+int equal(const void * k1, const void * k2)
+{
+    return !(*(int *)k1 == *(int *)k2);
+}
+
+int not_equal(const void * k1, const void * k2)
+{
+    return !(*(int *)k1 != *(int *)k2);
+}
+
+int less(const void * k1, const void * k2)
+{
+    return !(*(int *)k1 < *(int *)k2);
+}
+
+int greater(const void * k1, const void * k2)
+{
+    return !(*(int *)k1 > *(int *)k2);
+}
+//------------------------------------------------------------------------------
+
+bool test_swap_pop_if(void)
+{
+    int esz = sizeof(int);
+    c_vector vect_, * vect = &vect_;
+    check(c_vect_make(vect, esz, compar) == vect);
+
+    int arr[] = {1, 5, 5, 3, 5, 4, 6};
+    int sz = sizeof(arr)/sizeof(*arr);
+
+    int * elm;
+    for (int i = 0; i < sz; ++i)
+        check(*(elm = c_vect_push(vect, arr+i)) == arr[i]);
+
+    int what = 510;
+    check(!c_vect_swap_pop_if(vect, equal, &what));
+    what = 5;
+    check(c_vect_swap_pop_if(vect, less, &what) == 3);
+    check(c_vect_length(vect) == 4);
+    check(c_vect_compar(vect) == compar);
+    check(c_vect_swap_pop_if(vect, equal, &what) == 3);
+    check(c_vect_compar(vect) == compar);
+    check(c_vect_length(vect) == 1);
+    check(c_vect_swap_pop_if(vect, greater, &what) == 1);
+    check(c_vect_is_empty(vect));
+
+    c_vect_destroy(vect);
+    return true;
+}
+//------------------------------------------------------------------------------
+
+bool test_remove_if(void)
+{
+    int esz = sizeof(int);
+    c_vector vect_, * vect = &vect_;
+    check(c_vect_make(vect, esz, compar) == vect);
+
+    int arr[] = {1, 5, 5, 3, 5, 4, 6};
+    int sz = sizeof(arr)/sizeof(*arr);
+
+    int * elm;
+    for (int i = 0; i < sz; ++i)
+        check(*(elm = c_vect_push(vect, arr+i)) == arr[i]);
+
+    int what = 5;
+    check(c_vect_compar(vect) == compar);
+    check(c_vect_remove_if(vect, less, &what) == 3);
+    what = 510;
+    check(!c_vect_remove_if(vect, greater, &what));
+    what = 5;
+    check(c_vect_compar(vect) == compar);
+    check(c_vect_length(vect) == 4);
+    check(c_vect_is_sorted(vect));
+    check(c_vect_remove_if(vect, equal, &what) == 3);
+    check(c_vect_length(vect) == 1);
+    check(c_vect_remove_if(vect, greater, &what) == 1);
+    check(c_vect_is_empty(vect));
+
+    c_vect_destroy(vect);
+    return true;
+}
+//------------------------------------------------------------------------------
+
+bool test_find_if(void)
+{
+    int esz = sizeof(int);
+    c_vector vect_, * vect = &vect_;
+    check(c_vect_make(vect, esz, compar) == vect);
+
+    check(c_vect_compar(vect) == compar);
+    check(c_vect_set_compar(vect, NULL) == vect);
+    check(c_vect_compar(vect) == NULL);
+    check(c_vect_set_compar(vect, compar) == vect);
+    check(c_vect_compar(vect) == compar);
+
+    int end = 10;
+    for (int i = 0; i < end; ++i)
+        c_vect_push(vect, &i);
+
+    int * elm;
+    check(*(elm = c_vect_get(vect, 0)) == 0);
+    check(*(elm = c_vect_get(vect, 3)) == 3);
+    check(*(elm = c_vect_get(vect, 5)) == 5);
+    check(*(elm = c_vect_get(vect, 9)) == 9);
+
+    int from = 0, ifound = 0, what = -5;
+    void * pfound = c_vect_find_if_ind_from(vect, equal, &what, &ifound, from);
+    check(!pfound);
+    check(ifound == -1);
+
+    what = 2000;
+    check(c_vect_compar(vect) == compar);
+    pfound = c_vect_find_if_ind_from(vect, equal, &what, &ifound, from);
+    check(!pfound);
+    check(ifound == -1);
+    check(c_vect_compar(vect) == compar);
+
+    what = 5;
+    check(pfound = c_vect_find_if_ind_from(vect, equal, &what, &ifound, from));
+    check(*(elm = pfound) == 5);
+    check(ifound == 5);
+
+    check(c_vect_is_sorted(vect));
+
+    what = 9;
+    check(pfound = c_vect_find_if_ind(vect, equal, &what, &ifound));
+    check(*(elm = pfound) == 9);
+    check(ifound == 9);
+
+    what = 7;
+    check(pfound = c_vect_find_if_from(vect, equal, &what, 0));
+    check(*(elm = pfound) == 7);
+    check(ifound == 9);
+
+    what = 0;
+    check(pfound =
+        c_vect_find_if_ind_from(vect, not_equal, &what, &ifound, from));
+    check(*(elm = pfound) == 1);
+    check(ifound == 1);
+
+    what = 4;
+    check(pfound =
+        c_vect_find_if_ind_from(vect, not_equal, &what, &ifound, from));
+    check(*(elm = pfound) == 0);
+    check(ifound == 0);
+
+    check(c_vect_reset(vect) == vect);
+    int same[] = {5, 5, 5, 5, 5};
+    for (int i = 0; i < 5; ++i)
+        c_vect_push(vect, same+i);
+
+    what = 5;
+    pfound = c_vect_find_if_ind_from(vect, not_equal, &what, &ifound, from);
+    check(!pfound);
+    check(ifound == -1);
+
+    pfound = c_vect_find_if_ind_from(vect, equal, &what, &ifound, from);
+    check(*(elm = pfound) == 5);
+    check(ifound == 0);
+
+    what = 1;
+    pfound = c_vect_find_if_ind_from(vect, not_equal, &what, &ifound, from);
+    check(*(elm = pfound) == 5);
+    check(ifound == 0);
+
+    check(c_vect_reset(vect) == vect);
+    int arr[] = {1, 5, 5, 3, 5, 4, 6};
+    int sz = sizeof(arr)/sizeof(*arr);
+
+    for (int i = 0; i < sz; ++i)
+        check(*(elm = c_vect_push(vect, arr+i)) == arr[i]);
+
+    what = 5;
+    pfound = c_vect_find_if_ind_from(vect, less, &what, &ifound, from);
+    check(*(elm = pfound) == 1);
+    check(ifound == 0);
+
+    from = ifound+1;
+    pfound = c_vect_find_if_ind_from(vect, less, &what, &ifound, from);
+    check(*(elm = pfound) == 3);
+    check(ifound == 3);
+
+    from = ifound+1;
+    pfound = c_vect_find_if_ind_from(vect, less, &what, &ifound, from);
+    check(*(elm = pfound) == 4);
+    check(ifound == 5);
+
+    from = ifound+1;
+    pfound = c_vect_find_if_ind_from(vect, less, &what, &ifound, from);
+    check(!pfound);
+
+    c_vect_destroy(vect);
+    return true;
+}
+//------------------------------------------------------------------------------
+
+bool test_remove_range(void)
+{
+    int esz = sizeof(int);
+    c_vector vect_, * vect = &vect_;
+
+    int arr[] = {1111, 22222, 33333, 44444, 55555, 66666, 77777};
+    int arrsz = sizeof(arr)/sizeof(*arr);
+    check(c_vect_make_cap(vect, esz, compar, arrsz) == vect);
+
+    check(c_vect_reset(vect) == vect);
+    check(c_vect_is_empty(vect));
+
+    int * elm;
+    for (int i = 0; i < arrsz; ++i)
+        check(*(elm = c_vect_push(vect, arr+i)) == arr[i]);
+    check(c_vect_length(vect) == arrsz);
+    check(c_vect_trim(vect) == vect);
+
+    check(!c_vect_remove_range(vect, -1, 3));
+    check(!c_vect_remove_range(vect, 3, 2));
+    check(!c_vect_remove_range(vect, -1, -5));
+    check(!c_vect_remove_range(vect, 0, 100));
+    check(!c_vect_remove_range(vect, 30, 100));
+
+    check(c_vect_remove_range(vect, 1, 5) == vect);
+    check(c_vect_length(vect) == 2);
+    check(*(elm = c_vect_get(vect, 0)) == 1111);
+    check(*(elm = c_vect_get(vect, 1)) == 77777);
+
+    check(c_vect_remove_range(vect, 1, 1) == vect);
+    check(c_vect_length(vect) == 1);
+    check(*(elm = c_vect_get(vect, 0)) == 1111);
+
+    check(c_vect_remove_range(vect, 0, 0) == vect);
+    check(c_vect_is_empty(vect));
+
+    for (int i = 0; i < arrsz; ++i)
+        check(*(elm = c_vect_push(vect, arr+i)) == arr[i]);
+    check(c_vect_length(vect) == arrsz);
+    check(c_vect_remove_range(vect, 0, 6) == vect);
+    check(c_vect_is_empty(vect));
+
+    for (int i = 0; i < arrsz; ++i)
+        check(*(elm = c_vect_push(vect, arr+i)) == arr[i]);
+    check(c_vect_length(vect) == arrsz);
+
+    check(c_vect_remove_range(vect, 0, 0) == vect);
+    check(c_vect_length(vect) == arrsz-1);
+    for (int i = 0; i < arrsz-1; ++i)
+        check(*(elm = c_vect_get(vect, i)) == arr[i+1]);
+
+    c_vect_destroy(vect);
+    return true;
+}
+//------------------------------------------------------------------------------
+
+bool test_set_to_val(void)
+{
+    int esz = sizeof(int);
+    c_vector vect_, * vect = &vect_;
+    check(c_vect_make(vect, esz, compar) == vect);
+
+
+    int arr[] = {1, 2, 3, 4, 5, 6, 7};
+
+    int arrsz = sizeof(arr)/sizeof(*arr);
+    check(c_vect_reset(vect) == vect);
+    check(c_vect_is_empty(vect));
+
+    int * elm;
+    for (int i = 0; i < arrsz; ++i)
+        check(*(elm = c_vect_push(vect, arr+i)) == arr[i]);
+    check(c_vect_length(vect) == arrsz);
+
+    int n = 5;
+    check(c_vect_set_to_val(vect, &n) == vect);
+
+    for (int i = 0; i < arrsz; ++i)
+        check(*(elm = c_vect_get(vect, i)) == n);
+
+    c_vect_destroy(vect);
+    return true;
+}
+//------------------------------------------------------------------------------
+
+bool test_swap_pop_by_val(void)
+{
+    int esz = sizeof(int);
+    c_vector vect_, * vect = &vect_;
+    check(c_vect_make(vect, esz, compar) == vect);
+
+    int n = 5;
+    check(c_vect_swap_pop_by_val(vect, &n) == 0);
+
+    int arr[] = {4, 4, 5, 4, 4};
+    int arrsz = sizeof(arr)/sizeof(*arr);
+
+    check(c_vect_is_empty(vect));
+    for (int i = 0; i < arrsz; ++i)
+        c_vect_push(vect, arr+i);
+
+    check(c_vect_length(vect) == arrsz);
+    check(c_vect_swap_pop_by_val(vect, &n) == 1);
+    check(c_vect_length(vect) == arrsz-1);
+
+
+    int * elm;
+    for (int i = 0; i < arrsz-1; ++i)
+        check(*(elm = c_vect_get(vect, i)) == 4);
+
+    int arr2[] = {5, 4, 4, 5, 4, 4, 5, 5};
+    arrsz = sizeof(arr2)/sizeof(*arr2);
+    check(c_vect_reset(vect) == vect);
+    check(c_vect_is_empty(vect));
+
+    for (int i = 0; i < arrsz; ++i)
+        c_vect_push(vect, arr2+i);
+
+    check(c_vect_length(vect) == arrsz);
+    check(c_vect_swap_pop_by_val(vect, &n) == 4);
+    check(c_vect_length(vect) == arrsz-4);
+
+    for (int i = 0; i < arrsz-4; ++i)
+        check(*(elm = c_vect_get(vect, i)) == 4);
+
+    n = 4;
+    check(c_vect_swap_pop_by_val(vect, &n) == 4);
+    check(c_vect_is_empty(vect));
+
+    int arr3[] = {4, 4, 4, 4, 4, 4, 4, 4};
+
+    arrsz = sizeof(arr3)/sizeof(*arr3);
+    check(c_vect_reset(vect) == vect);
+    check(c_vect_is_empty(vect));
+
+    for (int i = 0; i < arrsz; ++i)
+        c_vect_push(vect, arr3+i);
+
+    check(c_vect_length(vect) == arrsz);
+    check(c_vect_swap_pop_by_val(vect, &n) == arrsz);
+    check(c_vect_is_empty(vect));
+
+    c_vect_push(vect, &n);
+    check(c_vect_length(vect) == 1);
+    check(c_vect_swap_pop_by_val(vect, &n) == 1);
+    check(c_vect_is_empty(vect));
+
+    int arr4[] = {1, 2, 3, 4};
+
+    arrsz = sizeof(arr4)/sizeof(*arr4);
+    check(c_vect_reset(vect) == vect);
+    check(c_vect_is_empty(vect));
+
+    for (int i = 0; i < arrsz; ++i)
+        c_vect_push(vect, arr4+i);
+    check(c_vect_length(vect) == arrsz);
+
+    n = 1;
+    check(c_vect_swap_pop_by_val(vect, &n) == 1);
+    check(c_vect_length(vect) == 3);
+    check(*(elm = c_vect_get(vect, 0)) == 4);
+    check(*(elm = c_vect_get(vect, 1)) == 2);
+    check(*(elm = c_vect_get(vect, 2)) == 3);
+
+    n = 2;
+    check(c_vect_swap_pop_by_val(vect, &n) == 1);
+    check(c_vect_length(vect) == 2);
+    check(*(elm = c_vect_get(vect, 0)) == 4);
+    check(*(elm = c_vect_get(vect, 1)) == 3);
+
+    n = 3;
+    check(c_vect_swap_pop_by_val(vect, &n) == 1);
+    check(c_vect_length(vect) == 1);
+    check(*(elm = c_vect_get(vect, 0)) == 4);
+
+    n = 4;
+    check(c_vect_swap_pop_by_val(vect, &n) == 1);
+    check(c_vect_is_empty(vect));
+
+    c_vect_destroy(vect);
+    return true;
+}
+//------------------------------------------------------------------------------
+
+bool test_peek_pop(void)
+{
+    int esz = sizeof(int);
+    c_vector vect_, * vect = &vect_;
+    check(c_vect_make(vect, esz, compar) == vect);
+
+    check(!c_vect_swap_pop_at(vect, -1));
+    check(!c_vect_swap_pop_at(vect, 1000));
+
+    int end = 10;
+    for (int i = 0; i < end; ++i)
+        c_vect_push(vect, &i);
+
+    check(c_vect_length(vect) == end);
+    int * peek = c_vect_peek(vect);
+    int * elm;
+    check(*(elm = c_vect_peek_pop(vect)) == end-1);
+    check(peek == elm);
+    check(c_vect_length(vect) == end-1);
+    check(*(elm = c_vect_peek_pop(vect)) == end-2);
+    check(c_vect_length(vect) == end-2);
+
+    while(c_vect_peek_pop(vect))
+        continue;
+
+    check(c_vect_is_empty(vect));
+
+    c_vect_destroy(vect);
+    return true;
+}
+//------------------------------------------------------------------------------
+
+bool test_swap_pop_reverse(void)
+{
+    int esz = sizeof(int);
+    c_vector vect_, * vect = &vect_;
+    check(c_vect_make(vect, esz, compar) == vect);
+
+    check(!c_vect_swap_pop_at(vect, -1));
+    check(!c_vect_swap_pop_at(vect, 1000));
+
+    int end = 10;
+    for (int i = 0; i < end; ++i)
+        c_vect_push(vect, &i);
+
+    check(c_vect_length(vect) == end);
+    check(c_vect_swap_pop_at(vect, 0) == vect);
+    check(c_vect_length(vect) == end-1);
+    int * elm;
+    check(*(elm = c_vect_get(vect, 0)) == end-1);
+    check(c_vect_swap_pop_at(vect, end-2) == vect);
+    check(c_vect_length(vect) == end-2);
+    check(*(elm = c_vect_get(vect, end-3)) == end-3);
+
+    c_vect_destroy(vect);
+
+    check(c_vect_make(vect, esz, compar) == vect);
+
+    for (int i = 0; i < end; ++i)
+        c_vect_push(vect, &i);
+
+    check(c_vect_length(vect) == end);
+    check(c_vect_swap_pop_at(vect, 2) == vect);
+    check(c_vect_length(vect) == end-1);
+    check(*(elm = c_vect_get(vect, 2)) == end-1);
+
+    while (c_vect_swap_pop_at(vect, 0))
+        continue;
+    check(c_vect_is_empty(vect));
+
+    c_vect_destroy(vect);
+
+    check(c_vect_make(vect, esz, compar) == vect);
+    for (int i = 0; i < end; ++i)
+        c_vect_push(vect, &i);
+    check(c_vect_reverse(vect) == vect);
+
+    for(int i = 0; i < end; ++i)
+        check(*(elm = c_vect_get(vect, i)) == end-1-i);
+
+    c_vect_destroy(vect);
+
+    --end;
+    check(c_vect_make(vect, esz, compar) == vect);
+    for (int i = 0; i < end; ++i)
+        c_vect_push(vect, &i);
+    check(c_vect_reverse(vect) == vect);
+
+    for(int i = 0; i < end; ++i)
+        check(*(elm = c_vect_get(vect, i)) == end-1-i);
+
+
+    c_vect_destroy(vect);
+    return true;
+}
+//------------------------------------------------------------------------------
+
+bool test_swap(void)
+{
+    int esz = sizeof(int);
+    c_vector vect_, * vect = &vect_;
+    check(c_vect_make(vect, esz, compar) == vect);
+
+    int n = 1;
+    c_vect_push(vect, &n);
+    n = 2;
+    c_vect_push(vect, &n);
+
+    int * elm;
+    check(*(elm = c_vect_get(vect, 0)) == 1);
+    check(*(elm = c_vect_get(vect, 1)) == 2);
+    check(c_vect_swap(vect, 0, 1) == vect);
+    check(*(elm = c_vect_get(vect, 0)) == 2);
+    check(*(elm = c_vect_get(vect, 1)) == 1);
+    check(c_vect_swap(vect, 1, 0) == vect);
+    check(*(elm = c_vect_get(vect, 0)) == 1);
+    check(*(elm = c_vect_get(vect, 1)) == 2);
+
+    c_vect_reset(vect);
+    int end = 10;
+    for (int i = 0; i < end; ++i)
+        c_vect_push(vect, &i);
+
+    for (int i = 0; i < end; ++i)
+        check(*(elm = c_vect_get(vect, i)) == i);
+
+    check(!c_vect_swap(vect, -1, 4));
+    check(!c_vect_swap(vect, 200, 4));
+    check(!c_vect_swap(vect, 2, -5));
+    check(!c_vect_swap(vect, 2, 99919));
+    check(!c_vect_swap(vect, 22, 33));
+    check(!c_vect_swap(vect, -9341, -321));
+
+    int end2 = end/2, last = c_vect_length(vect) - 1;
+    for (int i = 0; i < end2; ++i)
+        check(c_vect_swap(vect, i, last-i) == vect);
+
+    for (int i = 0, j = end-1; i < end; ++i, --j)
+        check(*(elm = c_vect_get(vect, i)) == j);
+
+    c_vect_destroy(vect);
+
+    check(c_vect_make(vect, esz, compar) == vect);
+
+    end = 9;
+    for (int i = 0; i < end; ++i)
+        c_vect_push(vect, &i);
+
+    for (int i = 0; i < end; ++i)
+        check(*(elm = c_vect_get(vect, i)) == i);
+
+    end2 = end/2, last = c_vect_length(vect) - 1;
+    for (int i = 0; i < end2; ++i)
+        check(c_vect_swap(vect, i, last-i) == vect);
+
+    for (int i = 0, j = end-1; i < end; ++i, --j)
+        check(*(elm = c_vect_get(vect, i)) == j);
+
+    c_vect_destroy(vect);
+    return true;
 }
 //------------------------------------------------------------------------------
 
@@ -81,6 +640,7 @@ bool test_copy(void)
     c_vector vect_, * vect = &vect_;
     check(c_vect_make(vect, esz, compar) == vect);
 
+    bool success = false;
     int end = c_vect_capacity(vect) - 5;
     for (int i = 0; i < end; ++i)
         c_vect_push(vect, &i);
@@ -98,7 +658,8 @@ bool test_copy(void)
     check(c_vect_capacity(cpy) != c_vect_capacity(vect));
     check(cpy->compar != vect->compar);
 
-    check(c_vect_copy(cpy, vect) == cpy);
+    cpy_ = c_vect_copy(vect, &success);
+    check(success);
     check(c_vect_length(cpy) == c_vect_length(vect));
     check(c_vect_elem_size(cpy) == c_vect_elem_size(vect));
     check(c_vect_data(cpy) != c_vect_data(vect));
@@ -125,7 +686,9 @@ bool test_copy(void)
     check(c_vect_capacity(cpy) != c_vect_capacity(vect));
     check(cpy->compar != vect->compar);
 
-    check(c_vect_copy(cpy, vect) == cpy);
+    success = false;
+    cpy_ = c_vect_copy(vect, &success);
+    check(success);
     check(c_vect_length(cpy) == c_vect_length(vect));
     check(c_vect_elem_size(cpy) == c_vect_elem_size(vect));
     check(c_vect_data(cpy) != c_vect_data(vect));
@@ -329,26 +892,26 @@ bool test_remove_at_index(void)
     for (int i = 0; i < max; ++i)
         c_vect_push(vect, &i);
 
-    check(c_vect_remove_at_index(vect, -123) == NULL);
-    check(c_vect_remove_at_index(vect, 123) == NULL);
+    check(c_vect_remove_at(vect, -123) == NULL);
+    check(c_vect_remove_at(vect, 123) == NULL);
 
     int rind = 4;
     int * n = c_vect_get(vect, rind);
     check(*n == 4);
-    check(c_vect_remove_at_index(vect, rind) == vect);
+    check(c_vect_remove_at(vect, rind) == vect);
     check(*n == 5);
 
 
     rind = 0;
     n = c_vect_get(vect, rind);
     check(*n == 0);
-    check(c_vect_remove_at_index(vect, rind) == vect);
+    check(c_vect_remove_at(vect, rind) == vect);
     check(*n == 1);
 
     rind = c_vect_length(vect) - 1;
     n = c_vect_get(vect, rind);
     check(*n == 9);
-    check(c_vect_remove_at_index(vect, rind) == vect);
+    check(c_vect_remove_at(vect, rind) == vect);
     check(c_vect_length(vect) == 7);
 
     c_vect_destroy(vect);
@@ -377,24 +940,24 @@ bool test_insert_at_index(void)
     check(*first == 2+offs);
 
     int n = 0;
-    check(c_vect_insert_at_index(vect, -123, &n) == NULL);
-    check(c_vect_insert_at_index(vect, 123, &n) == NULL);
+    check(c_vect_insert_at(vect, -123, &n) == NULL);
+    check(c_vect_insert_at(vect, 123, &n) == NULL);
 
-    check(c_vect_insert_at_index(vect, 0, &n) == c_vect_data(vect));
+    check(c_vect_insert_at(vect, 0, &n) == c_vect_data(vect));
     first = c_vect_get(vect, 0);
     check(*first == n);
     check(c_vect_capacity(vect) == cap);
 
     n = 10;
     int last = c_vect_length(vect) - 1, * pe;
-    check(c_vect_insert_at_index(vect, last, &n) == (int *)vect->arr + last);
+    check(c_vect_insert_at(vect, last, &n) == (int *)vect->arr + last);
     check(((int *)vect->arr)[last] == n);
     check(*(pe = c_vect_get(vect, last)) == n);
     check(c_vect_capacity(vect) == cap*2);
 
     int mid = 2;
     n = 8;
-    check(c_vect_insert_at_index(vect, mid, &n) == (int *)vect->arr + mid);
+    check(c_vect_insert_at(vect, mid, &n) == (int *)vect->arr + mid);
     check(((int *)vect->arr)[mid] == n);
     check(*(pe = c_vect_get(vect, mid)) == n);
 
@@ -414,39 +977,39 @@ bool test_write_at_index(void)
     check(c_vect_make(vect, esz, NULL) == vect);
 
     int n = 6;
-    check(c_vect_write_at_index(vect, -1, &n) == NULL);
-    check(c_vect_write_at_index(vect, -123, &n) == NULL);
-    check(c_vect_write_at_index(vect, 124, &n) == NULL);
+    check(c_vect_write_at(vect, -1, &n) == NULL);
+    check(c_vect_write_at(vect, -123, &n) == NULL);
+    check(c_vect_write_at(vect, 124, &n) == NULL);
 
     int cap = c_vect_capacity(vect);
-    check(c_vect_write_at_index(vect, cap, &n) == NULL);
+    check(c_vect_write_at(vect, cap, &n) == NULL);
 
     check(vect->arr == c_vect_data(vect));
     check(c_vect_is_empty(vect));
-    check(c_vect_write_at_index(vect, 0, &n) == NULL);
+    check(c_vect_write_at(vect, 0, &n) == NULL);
 
     int i;
     for (i = 0; i < 8; ++i)
         c_vect_push(vect, &i);
 
-    check(c_vect_write_at_index(vect, -1, &n) == NULL);
-    check(c_vect_write_at_index(vect, -123, &n) == NULL);
-    check(c_vect_write_at_index(vect, 124, &n) == NULL);
+    check(c_vect_write_at(vect, -1, &n) == NULL);
+    check(c_vect_write_at(vect, -123, &n) == NULL);
+    check(c_vect_write_at(vect, 124, &n) == NULL);
 
-    check(c_vect_write_at_index(vect, 0, &n) == c_vect_data(vect));
+    check(c_vect_write_at(vect, 0, &n) == c_vect_data(vect));
     check(((int *)vect->arr)[0] == n);
     int * pe;
     check(*(pe = c_vect_get(vect, 0)) == n);
 
     int len = c_vect_length(vect);
-    check(c_vect_write_at_index(vect, len, &n) == NULL);
+    check(c_vect_write_at(vect, len, &n) == NULL);
     --len;
-    check(c_vect_write_at_index(vect, len, &n) == ((int *)vect->arr) + len);
+    check(c_vect_write_at(vect, len, &n) == ((int *)vect->arr) + len);
     check(((int *)vect->arr)[len] == n);
     check(*(pe = c_vect_get(vect, len)) == n);
 
     int mid = 5;
-    check(c_vect_write_at_index(vect, mid, &n) == ((int *)vect->arr) + mid);
+    check(c_vect_write_at(vect, mid, &n) == ((int *)vect->arr) + mid);
     check(((int *)vect->arr)[mid] == n);
     check(*(pe = c_vect_get(vect, mid)) == n);
 
@@ -614,6 +1177,26 @@ bool test_insert_online(void)
         check(*(elem = c_vect_get(vect, i)) == checkarr[i]);
 
     c_vect_destroy(vect);
+
+    check(c_vect_make_cap(vect, esz, compar, cap) == vect);
+
+    int newarr2[] = {5, 5, 5, 5};
+    arr_size = sizeof(newarr2)/sizeof(*newarr2);
+
+    check(c_vect_is_empty(vect));
+    for (int i = 0; i < arr_size; ++i)
+        c_vect_push(vect, newarr2+i);
+
+    check(c_vect_is_sorted(vect));
+    n = 5;
+    check(*(ins = c_vect_insert_online(vect, &n)) == n);
+    n = 1;
+    check(*(ins = c_vect_insert_online(vect, &n)) == n);
+    n = 10;
+    check(*(ins = c_vect_insert_online(vect, &n)) == n);
+    check(c_vect_is_sorted(vect));
+
+    c_vect_destroy(vect);
     return true;
 }
 //------------------------------------------------------------------------------
@@ -765,7 +1348,7 @@ bool test_sort(void)
 }
 //------------------------------------------------------------------------------
 
-bool test_find(void)
+bool test_find_rem_by_val(void)
 {
     int esz = sizeof(int);
     int cap = 1;
@@ -801,6 +1384,56 @@ bool test_find(void)
     check(c_vect_find_ind(vect, &n, NULL) == NULL);
     check(c_vect_find_ind(vect, &n, &pos) == NULL);
     check(pos == -1);
+
+    c_vect_destroy(vect);
+
+    check(c_vect_make_cap(vect, esz, compar, cap) == vect);
+
+    int arr[] = {1, 2, 1, 3, 4, 5, 5, 5, 8};
+    int asz = sizeof(arr)/sizeof(*arr);
+
+    int * elm;
+    for (int i = 0; i < asz; ++i)
+    {
+        check(
+            c_vect_push(vect, arr+i) == c_vect_get(vect, c_vect_length(vect)-1)
+            );
+        check(*(elm = c_vect_get(vect, i)) == arr[i]);
+        check(c_vect_find_from(vect, arr+i, i) == c_vect_get(vect, i));
+        check(*(elm = c_vect_find_from(vect, arr+i, i)) == arr[i]);
+    }
+
+    int oi = 100;
+    check(!c_vect_find_ind_from(vect, arr, &oi, -1341));
+    check(!c_vect_find_from(vect, arr, -1));
+    check(!c_vect_find_ind_from(vect, arr, &oi, 32));
+    check(!c_vect_find_from(vect, arr, 1000));
+    check(oi == -1);
+
+    check(c_vect_find_from(vect, arr, 0) == c_vect_get(vect, 0));
+    check(oi == -1);
+    check(c_vect_find_ind_from(vect, arr, &oi, 0) == c_vect_get(vect, 0));
+    check(oi == 0);
+    check(c_vect_find_ind_from(vect, arr, &oi, 1) == c_vect_get(vect, 2));
+    check(oi == 2);
+    check(c_vect_find_from(vect, arr, 1) == c_vect_get(vect, 2));
+
+    int val = -123;
+    check(!c_vect_remove_by_val(vect, &val));
+    val = 1234;
+    check(!c_vect_remove_by_val(vect, &val));
+
+    val = 1;
+    check(c_vect_remove_by_val(vect, &val) == 2);
+    val = 5;
+    check(c_vect_remove_by_val(vect, &val) == 3);
+    val = 8;
+    check(c_vect_remove_by_val(vect, &val) == 1);
+
+    check(c_vect_length(vect) == 3);
+    check(*(elm = c_vect_get(vect, 0)) == 2);
+    check(*(elm = c_vect_get(vect, 1)) == 3);
+    check(*(elm = c_vect_get(vect, 2)) == 4);
 
     c_vect_destroy(vect);
     return true;

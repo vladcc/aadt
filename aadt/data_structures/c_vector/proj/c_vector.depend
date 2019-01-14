@@ -16,3 +16,57 @@
 	<stdlib.h>
 	"c_vector.h"
 
+1544829804 source:/home/vld/aaaidsl/c_vector/c_vector.c
+	<string.h>
+	<stdlib.h>
+	"c_vector.h"
+
+1544829838 /home/vld/aaaidsl/c_vector/c_vector.h
+	<stdbool.h>
+	<stddef.h>
+
+1544829802 source:/home/vld/aaaidsl/c_vector/test.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	"test.h"
+	"c_vector.h"
+
+1540234146 /home/vld/aaaidsl/c_vector/test.h
+
+1547488990 source:/home/vld/aaidsl/c_vector/c_vector.c
+	<string.h>
+	<stdlib.h>
+	"c_vector.h"
+
+1547490945 /home/vld/aaidsl/c_vector/c_vector.h
+	<stdbool.h>
+	<stddef.h>
+
+1547489241 source:/home/vld/aaidsl/c_vector/test.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	"test.h"
+	"c_vector.h"
+
+1540234146 /home/vld/aaidsl/c_vector/test.h
+
+1547488990 source:/home/vld/GitHub/aadt/aadt/data_structures/c_vector/c_vector.c
+	<string.h>
+	<stdlib.h>
+	"c_vector.h"
+
+1547490945 /home/vld/GitHub/aadt/aadt/data_structures/c_vector/c_vector.h
+	<stdbool.h>
+	<stddef.h>
+
+1547489241 source:/home/vld/GitHub/aadt/aadt/data_structures/c_vector/test.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	"test.h"
+	"c_vector.h"
+
+1540234146 /home/vld/GitHub/aadt/aadt/data_structures/c_vector/test.h
+
